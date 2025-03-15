@@ -1,12 +1,12 @@
-import * as vscode from "vscode";
+import { exec } from "node:child_process";
 import path from "node:path";
+import * as vscode from "vscode";
 import {
 	audioQueryAudioQueryPost,
 	getSynthesisSynthesisPostUrl,
 	synthesisSynthesisPost,
 	type synthesisSynthesisPostResponse,
 } from "./gen/endpoints/vOICEVOXEngine";
-import { exec } from "node:child_process";
 import type { AudioQuery, SynthesisSynthesisPostParams } from "./gen/models";
 
 const extractText = () => {
@@ -52,9 +52,12 @@ const generateAudio = async (text?: string) => {
 		return;
 	}
 	console.log(queryRes.data);
-	const audioRes = await synthesysPostBlob(queryRes.data, {
-		speaker: 14,
-	});
+	const audioRes = await synthesysPostBlob(
+		{ ...queryRes.data, speedScale: 1.3 },
+		{
+			speaker: 14,
+		},
+	);
 	if (audioRes.status !== 200) {
 		return;
 	}
@@ -88,17 +91,20 @@ Start-Sleep 1; Start-Sleep -s $mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds
 
 const playAudio = (uri?: vscode.Uri) => {
 	if (!uri) return;
-	const path = uri.fsPath;
+	const audioPath = uri.fsPath;
 	// biome-ignore lint/style/useTemplate: <explanation>
-	console.log("playing audio" + path);
-	exec(`powershell -c ${windowsPlayCommand(path)}`, (error, stdout, stderr) => {
-		if (error) {
-			console.error(`exec error: ${error}`);
-			return;
-		}
-		console.log(`stdout: ${stdout}`);
-		console.error(`stderr: ${stderr}`);
-	});
+	console.log("playing audio" + audioPath);
+	exec(
+		`powershell -c ${windowsPlayCommand(audioPath)}`,
+		(error, stdout, stderr) => {
+			if (error) {
+				console.error(`exec error: ${error}`);
+				return;
+			}
+			console.log(`stdout: ${stdout}`);
+			console.error(`stderr: ${stderr}`);
+		},
+	);
 };
 
 export const launchSpeaker = async (context: vscode.ExtensionContext) => {

@@ -7,12 +7,8 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"include": [
-			"**/*.ts"
-		],
-		"ignore": [
-			"**/gen/**"
-		]
+		"include": ["**/*.ts"],
+		"ignore": ["**/gen/**", "**/.vscode-test/**", "**/node_modules/**"]
 	},
 	"formatter": {
 		"enabled": true,

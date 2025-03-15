@@ -1,8 +1,8 @@
+import path from "node:path";
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
-import path from "node:path";
-import { launchSpeaker } from "./launchSpeeker";
+import { launchSpeaker } from "./launchSpeaker";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed

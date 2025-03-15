@@ -56,5 +56,6 @@ export const generateAudio = async (text?: string) => {
     return audioRes.data;
   } catch (e) {
     vscode.window.showErrorMessage("Failed to generate audio");
+    logger.error(JSON.stringify(e));
   }
 };

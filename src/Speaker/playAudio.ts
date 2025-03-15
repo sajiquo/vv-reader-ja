@@ -1,4 +1,6 @@
-import { type ChildProcess, spawn } from "node:child_process";
+import { spawn } from "node:child_process";
+import { logger } from "../logger";
+import type { SpeakerContext } from "./ctx";
 
 // NOTE: powershellでやるぶんにはjobを使ったほうがいいのではないか
 
@@ -8,47 +10,36 @@ const windowsPlayScript = (path: string) =>
 const createPlayProcess = (audioPath: string) =>
   spawn("powershell", ["-c", windowsPlayScript(audioPath)]);
 
-const attachLog = (child: ChildProcess) => {
-  console.debug("[playing] start", child?.pid);
-  child.stdout?.on("data", (data) => {
-    console.log(`[playing] stdout: ${data}`);
+const attachLog = (ctx: SpeakerContext) => {
+  ctx.speakProcess?.stdout?.on("data", (data) => {
+    logger.trace(`[playing] stdout: ${data}`);
   });
-  child.stderr?.on("data", (data) => {
-    console.error(`[playing] stderr: ${data}`);
+  ctx.speakProcess?.stderr?.on("data", (data) => {
+    logger.trace(`[playing] stderr: ${data}`);
   });
-  child.on("close", (code) => {
-    console.log(`[playing] child process exited with code ${code}`);
+  ctx.speakProcess?.on("close", (code) => {
+    logger.trace(`[playing] child process exited with code ${code}`);
   });
 };
 
-export const generatePlayer = () => {
-  let playerProcess: ChildProcess | null = null;
+const handleClose = (ctx: SpeakerContext) => {
+  ctx.speakProcess?.on("close", () => {
+    ctx.speakProcess = null;
+  });
+  ctx.speakProcess?.unref();
+};
 
-  const handleClose = (child: ChildProcess) => {
-    child.on("close", () => {
-      playerProcess = null;
-    });
-    child.unref();
-  };
+export const playAudio = (ctx: SpeakerContext) => {
+  if (!ctx.tmpfile) return;
+  if (ctx.speakProcess) stopAudio(ctx);
+  const process = createPlayProcess(ctx.tmpfile);
+  ctx.speakProcess = process;
+  handleClose(ctx);
+  attachLog(ctx);
+};
 
-  const isPlaying = () => !!playerProcess?.pid;
-  const play = async (audioPath?: string) => {
-    if (!audioPath) return;
-    if (isPlaying()) stop();
-    playerProcess = createPlayProcess(audioPath);
-    attachLog(playerProcess);
-    handleClose(playerProcess);
-  };
-  const stop = () => {
-    if (!playerProcess?.pid) return;
-    console.debug("[playing] stop", playerProcess?.pid);
-    playerProcess.kill("SIGTERM");
-    playerProcess = null;
-  };
-
-  return {
-    isPlaying,
-    play,
-    stop,
-  };
+export const stopAudio = (ctx: SpeakerContext) => {
+  if (!ctx.speakProcess) return;
+  ctx.speakProcess.kill("SIGTERM");
+  ctx.speakProcess = null;
 };

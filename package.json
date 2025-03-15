@@ -9,7 +9,10 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onLanguage:markdown",
+    "onLanguage:novel"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
@@ -37,6 +40,7 @@
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
+    "check": "npm-run-all -s fix check-types",
     "check-types": "tsc --noEmit",
     "lint": "biome check",
     "fix": "biome check --write",

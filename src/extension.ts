@@ -1,19 +1,20 @@
 import * as vscode from "vscode";
 import { checkVV } from "./checkVV";
-import { speakSelected, stopSpeaking } from "./speaker/speaker";
+import { createSpeaker } from "./speaker/speaker";
+
+const speaker = createSpeaker();
 
 export function activate(context: vscode.ExtensionContext) {
   checkVV();
 
   context.subscriptions.push(
-    vscode.commands.registerCommand("vv-reader-ja.checkVersion", async () => {
-      await checkVV();
-    }),
+    vscode.commands.registerCommand("vv-reader-ja.checkVersion", checkVV),
   );
   context.subscriptions.push(
-    vscode.commands.registerCommand("vv-reader-ja.speakSelected", async () => {
-      await speakSelected();
-    }),
+    vscode.commands.registerTextEditorCommand(
+      "vv-reader-ja.speakSelected",
+      speaker.speak,
+    ),
   );
 
   context.subscriptions.push(
@@ -24,5 +25,5 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 export function deactivate() {
-  stopSpeaking();
+  speaker.stop();
 }

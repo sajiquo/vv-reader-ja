@@ -1,5 +1,6 @@
 import path from "node:path";
 import * as vscode from "vscode";
+import { logger } from "../logger";
 
 export const saveAsTmpFile = async (audio?: Blob) => {
   if (!audio) return;
@@ -13,6 +14,6 @@ export const saveAsTmpFile = async (audio?: Blob) => {
     fileUri,
     new Uint8Array(await audio.arrayBuffer()),
   );
-  console.log("saved temporal file");
+  logger.debug("saved temporal file");
   return fileUri.fsPath;
 };

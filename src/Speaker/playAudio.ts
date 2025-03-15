@@ -15,8 +15,7 @@ const windowsPlayCommand = (path: string) =>
 export const playAudio = (uri?: vscode.Uri) => {
   if (!uri) return;
   const audioPath = uri.fsPath;
-  // biome-ignore lint/style/useTemplate: <explanation>
-  console.log("playing audio" + audioPath);
+  console.log("playing audio", audioPath);
   exec(windowsPlayCommand(audioPath), (error, stdout, stderr) => {
     if (error) {
       console.error(`exec error: ${error}`);

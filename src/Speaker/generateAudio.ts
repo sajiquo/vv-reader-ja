@@ -9,7 +9,7 @@ import type { AudioQuery, SynthesisSynthesisPostParams } from "../gen/models";
 // Orval generated code handles only text (JSON) inputs and outputs.
 // Add snipet for handling binary data (wav) here.
 // NOTE: This code can be generated from Orval transformer settings.
-const getSynthesisSynethesisPostBlob = async (
+const getSynthesisSynthesisPostBlob = async (
   audioQuery: AudioQuery,
   params: SynthesisSynthesisPostParams,
   options?: RequestInit,
@@ -42,7 +42,7 @@ export const generateAudio = async (text?: string) => {
     if (queryRes.status !== 200) {
       throw new Error("Failed to generate audio");
     }
-    const audioRes = await getSynthesisSynethesisPostBlob(
+    const audioRes = await getSynthesisSynthesisPostBlob(
       { ...queryRes.data, speedScale: 1.3 },
       {
         speaker: 14,

@@ -5,6 +5,7 @@ import {
   type synthesisSynthesisPostResponse,
 } from "../gen/endpoints/vOICEVOXEngine";
 import type { AudioQuery, SynthesisSynthesisPostParams } from "../gen/models";
+import { logger } from "../logger";
 
 // Orval generated code handles only text (JSON) inputs and outputs.
 // Add snipet for handling binary data (wav) here.
@@ -51,9 +52,10 @@ export const generateAudio = async (text?: string) => {
     if (audioRes.status !== 200) {
       throw new Error("Failed to generate audio");
     }
-    console.log("generated audio");
+    logger.debug("generated audio");
     return audioRes.data;
   } catch (e) {
     vscode.window.showErrorMessage("Failed to generate audio");
+    logger.error(JSON.stringify(e));
   }
 };

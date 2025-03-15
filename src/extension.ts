@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { checkVV } from "./checkVV";
-import { launchSpeaker } from "./launchSpeaker";
+import { speakSelected, stopSpeaking } from "./speaker";
 
 export function activate(context: vscode.ExtensionContext) {
   checkVV();
@@ -12,9 +12,17 @@ export function activate(context: vscode.ExtensionContext) {
   );
   context.subscriptions.push(
     vscode.commands.registerCommand("vv-reader-ja.speakSelected", async () => {
-      await launchSpeaker();
+      await speakSelected();
+    }),
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand("vv-reader-ja.stopSpeaking", () => {
+      stopSpeaking();
     }),
   );
 }
 
-export function deactivate() {}
+export function deactivate() {
+  stopSpeaking();
+}

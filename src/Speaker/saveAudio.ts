@@ -14,5 +14,5 @@ export const saveAsTmpFile = async (audio?: Blob) => {
     new Uint8Array(await audio.arrayBuffer()),
   );
   console.log("saved temporal file");
-  return fileUri;
+  return fileUri.fsPath;
 };

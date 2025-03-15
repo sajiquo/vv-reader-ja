@@ -20,6 +20,10 @@
       {
         "command": "vv-reader-ja.speakSelected",
         "title": "VVReader: Speak Selected Text"
+      },
+      {
+        "command": "vv-reader-ja.stopSpeaking",
+        "title": "VVReader: Stop Speaking"
       }
     ]
   },

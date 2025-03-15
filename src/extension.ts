@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { checkVV } from "./checkVV";
-import { speakSelected, stopSpeaking } from "./speaker";
+import { speakSelected, stopSpeaking } from "./speaker/speaker";
 
 export function activate(context: vscode.ExtensionContext) {
   checkVV();

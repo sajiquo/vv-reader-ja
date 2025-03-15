@@ -1,7 +1,7 @@
-import { extractText } from "./Speaker/extractText";
-import { generateAudio } from "./Speaker/generateAudio";
-import { generatePlayer } from "./Speaker/playAudio";
-import { saveAsTmpFile } from "./Speaker/saveAudio";
+import { extractText } from "./extractText";
+import { generateAudio } from "./generateAudio";
+import { generatePlayer } from "./playAudio";
+import { saveAsTmpFile } from "./saveAudio";
 
 const player = generatePlayer();
 

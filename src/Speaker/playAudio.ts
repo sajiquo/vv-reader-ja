@@ -22,24 +22,24 @@ const attachLog = (ctx: SpeakerContext) => {
   });
 };
 
-const handleClose = (ctx: SpeakerContext) => {
+const handleClose = (ctx: SpeakerContext, onStop?: () => void) => {
   ctx.speakProcess?.on("close", () => {
+    onStop?.();
     ctx.speakProcess = null;
   });
   ctx.speakProcess?.unref();
 };
 
-export const playAudio = (ctx: SpeakerContext) => {
+export const playAudio = (ctx: SpeakerContext, onStop?: () => void) => {
   if (!ctx.tmpfile) return;
   if (ctx.speakProcess) stopAudio(ctx);
   const process = createPlayProcess(ctx.tmpfile);
   ctx.speakProcess = process;
-  handleClose(ctx);
+  handleClose(ctx, onStop);
   attachLog(ctx);
 };
 
 export const stopAudio = (ctx: SpeakerContext) => {
   if (!ctx.speakProcess) return;
   ctx.speakProcess.kill("SIGTERM");
-  ctx.speakProcess = null;
 };

@@ -6,6 +6,7 @@ import {
 } from "../gen/endpoints/vOICEVOXEngine";
 import type { AudioQuery, SynthesisSynthesisPostParams } from "../gen/models";
 import { logger } from "../logger";
+import { type Maybe, just, nothing } from "../maybe";
 
 // Orval generated code handles only text (JSON) inputs and outputs.
 // Add snipet for handling binary data (wav) here.
@@ -32,8 +33,10 @@ const getSynthesisSynthesisPostBlob = async (
   } as synthesisSynthesisPostResponse;
 };
 
-export const generateAudio = async (text?: string) => {
-  if (!text) return;
+export const generateAudio = async (
+  text: Maybe<string>,
+): Promise<Maybe<Blob>> => {
+  if (!text) return nothing();
   try {
     const queryRes = await audioQueryAudioQueryPost({
       text,
@@ -53,9 +56,10 @@ export const generateAudio = async (text?: string) => {
       throw new Error("Failed to generate audio");
     }
     logger.debug("generated audio");
-    return audioRes.data;
+    return just(audioRes.data);
   } catch (e) {
     vscode.window.showErrorMessage("Failed to generate audio");
     logger.error(JSON.stringify(e));
+    return nothing();
   }
 };

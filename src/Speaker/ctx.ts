@@ -1,14 +1,15 @@
 import type { ChildProcess } from "node:child_process";
 import { logger } from "../logger";
+import { type Maybe, nothing } from "../maybe";
 
 export type SpeakerContext = {
-  tmpfile: string | null;
-  speakProcess: ChildProcess | null;
+  temporaryFilePath: Maybe<string>;
+  speakProcess: Maybe<ChildProcess>;
 };
 
 const _ctx: SpeakerContext = {
-  tmpfile: null,
-  speakProcess: null,
+  temporaryFilePath: nothing(),
+  speakProcess: nothing(),
 };
 
 export const ctx = new Proxy(_ctx, {

@@ -19,15 +19,15 @@ export const saveAsTmpFile = async (
     fileUri,
     new Uint8Array(await audio.arrayBuffer()),
   );
-  logger.debug("saved temporal file");
-  ctx.tmpfile = fileUri.fsPath;
+  logger.debug("saved temporary file");
+  ctx.temporaryFilePath = fileUri.fsPath;
   return just(true);
 };
 
 export const deleteTmpFile = async (ctx: SpeakerContext) => {
-  const filePath = ctx.tmpfile;
+  const filePath = ctx.temporaryFilePath;
   if (!filePath) return;
   await vscode.workspace.fs.delete(vscode.Uri.file(filePath));
-  logger.debug("deleted temporal file");
-  ctx.tmpfile = null;
+  logger.debug("deleted temporary file");
+  ctx.temporaryFilePath = null;
 };

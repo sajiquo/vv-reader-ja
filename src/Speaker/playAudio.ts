@@ -31,9 +31,9 @@ const handleClose = (ctx: SpeakerContext, onStop?: () => void) => {
 };
 
 export const playAudio = (ctx: SpeakerContext, onStop?: () => void) => {
-  if (!ctx.tmpfile) return;
+  if (!ctx.temporaryFilePath) return;
   if (ctx.speakProcess) stopAudio(ctx);
-  const process = createPlayProcess(ctx.tmpfile);
+  const process = createPlayProcess(ctx.temporaryFilePath);
   ctx.speakProcess = process;
   handleClose(ctx, onStop);
   attachLog(ctx);
